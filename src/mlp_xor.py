@@ -178,6 +178,73 @@ X_64 = np.array([[-1, generate_noise_for_0(), generate_noise_for_0()],
                  [-1, generate_noise_for_1(), generate_noise_for_0()],
                  [-1, generate_noise_for_1(), generate_noise_for_1()]])
 
+# input 64
+X_64_test = np.array([
+                 [-1, generate_noise_for_0(), generate_noise_for_0()],
+                 [-1, generate_noise_for_0(), generate_noise_for_1()],
+                 [-1, generate_noise_for_1(), generate_noise_for_0()],
+                 [-1, generate_noise_for_1(), generate_noise_for_1()],
+                 [-1, generate_noise_for_0(), generate_noise_for_0()],
+                 [-1, generate_noise_for_0(), generate_noise_for_1()],
+                 [-1, generate_noise_for_1(), generate_noise_for_0()],
+                 [-1, generate_noise_for_1(), generate_noise_for_1()],
+                 [-1, generate_noise_for_0(), generate_noise_for_0()],
+                 [-1, generate_noise_for_0(), generate_noise_for_1()],
+                 [-1, generate_noise_for_1(), generate_noise_for_0()],
+                 [-1, generate_noise_for_1(), generate_noise_for_1()],
+                 [-1, generate_noise_for_0(), generate_noise_for_0()],
+                 [-1, generate_noise_for_0(), generate_noise_for_1()],
+                 [-1, generate_noise_for_1(), generate_noise_for_0()],
+                 [-1, generate_noise_for_1(), generate_noise_for_1()],
+                 [-1, generate_noise_for_0(), generate_noise_for_0()],
+                 [-1, generate_noise_for_0(), generate_noise_for_1()],
+                 [-1, generate_noise_for_1(), generate_noise_for_0()],
+                 [-1, generate_noise_for_1(), generate_noise_for_1()],
+                 [-1, generate_noise_for_0(), generate_noise_for_0()],
+                 [-1, generate_noise_for_0(), generate_noise_for_1()],
+                 [-1, generate_noise_for_1(), generate_noise_for_0()],
+                 [-1, generate_noise_for_1(), generate_noise_for_1()],
+                 [-1, generate_noise_for_0(), generate_noise_for_0()],
+                 [-1, generate_noise_for_0(), generate_noise_for_1()],
+                 [-1, generate_noise_for_1(), generate_noise_for_0()],
+                 [-1, generate_noise_for_1(), generate_noise_for_1()],
+                 [-1, generate_noise_for_0(), generate_noise_for_0()],
+                 [-1, generate_noise_for_0(), generate_noise_for_1()],
+                 [-1, generate_noise_for_1(), generate_noise_for_0()],
+                 [-1, generate_noise_for_1(), generate_noise_for_1()],
+                 [-1, generate_noise_for_0(), generate_noise_for_0()],
+                 [-1, generate_noise_for_0(), generate_noise_for_1()],
+                 [-1, generate_noise_for_1(), generate_noise_for_0()],
+                 [-1, generate_noise_for_1(), generate_noise_for_1()],
+                 [-1, generate_noise_for_0(), generate_noise_for_0()],
+                 [-1, generate_noise_for_0(), generate_noise_for_1()],
+                 [-1, generate_noise_for_1(), generate_noise_for_0()],
+                 [-1, generate_noise_for_1(), generate_noise_for_1()],
+                 [-1, generate_noise_for_0(), generate_noise_for_0()],
+                 [-1, generate_noise_for_0(), generate_noise_for_1()],
+                 [-1, generate_noise_for_1(), generate_noise_for_0()],
+                 [-1, generate_noise_for_1(), generate_noise_for_1()],
+                 [-1, generate_noise_for_0(), generate_noise_for_0()],
+                 [-1, generate_noise_for_0(), generate_noise_for_1()],
+                 [-1, generate_noise_for_1(), generate_noise_for_0()],
+                 [-1, generate_noise_for_1(), generate_noise_for_1()],
+                 [-1, generate_noise_for_0(), generate_noise_for_0()],
+                 [-1, generate_noise_for_0(), generate_noise_for_1()],
+                 [-1, generate_noise_for_1(), generate_noise_for_0()],
+                 [-1, generate_noise_for_1(), generate_noise_for_1()],
+                 [-1, generate_noise_for_0(), generate_noise_for_0()],
+                 [-1, generate_noise_for_0(), generate_noise_for_1()],
+                 [-1, generate_noise_for_1(), generate_noise_for_0()],
+                 [-1, generate_noise_for_1(), generate_noise_for_1()],
+                 [-1, generate_noise_for_0(), generate_noise_for_0()],
+                 [-1, generate_noise_for_0(), generate_noise_for_1()],
+                 [-1, generate_noise_for_1(), generate_noise_for_0()],
+                 [-1, generate_noise_for_1(), generate_noise_for_1()],
+                 [-1, generate_noise_for_0(), generate_noise_for_0()],
+                 [-1, generate_noise_for_0(), generate_noise_for_1()],
+                 [-1, generate_noise_for_1(), generate_noise_for_0()],
+                 [-1, generate_noise_for_1(), generate_noise_for_1()]])
+
 
 class MLP4Neuron:
     def __init__(self):
@@ -263,6 +330,22 @@ class MLP4Neuron:
 
         plt.plot(losses, label='4 hidden neurons, 64 training vectors')
 
+    def generalisation_test(self):
+        losses_train = []
+        losses_test = []
+        self.init_weights()
+        for i in range(epochs):
+            self.train_hidden4(X_64, Y_64)
+            if i % 500 == 0:
+                output_train = forward_prop(X_64, self.V_4, self.W_4)
+                output_test = forward_prop(X_64_test, self.V_4, self.W_4)
+                MSE_train = loss(Y_64.T, output_train)
+                MSE_test = loss(Y_64.T, output_test)
+                losses_train.append(MSE_train)
+                losses_test.append(MSE_test)
+
+        plt.plot(losses_train, label='4 hidden neurons, 64 training vectors, on training data')
+        plt.plot(losses_test, label='4 hidden neurons, 64 training vectors, on test data')
 
 class MLP2Neuron:
     def __init__(self):
@@ -347,6 +430,23 @@ class MLP2Neuron:
                 losses.append(MSE)
 
         plt.plot(losses, label='2 hidden neurons, 64 training vectors')
+
+    def generalisation_test(self):
+        losses_train = []
+        losses_test = []
+        self.init_weights()
+        for i in range(epochs):
+            self.train_hidden2(X_64, Y_64)
+            if i % 500 == 0:
+                output_train = forward_prop(X_64, self.V_2, self.W_2)
+                output_test = forward_prop(X_64_test, self.V_2, self.W_2)
+                MSE_train = loss(Y_64.T, output_train)
+                MSE_test = loss(Y_64.T, output_test)
+                losses_train.append(MSE_train)
+                losses_test.append(MSE_test)
+
+        plt.plot(losses_train, label='2 hidden neurons, 64 training vectors, on training data')
+        plt.plot(losses_test, label='2 hidden neurons, 64 training vectors, on test data')
 
 
 class MLP8Neuron:
@@ -434,32 +534,27 @@ class MLP8Neuron:
 
         plt.plot(losses, label='8 hidden neurons, 64 training vectors')
 
+    def generalisation_test(self):
+        losses_train = []
+        losses_test = []
+        self.init_weights()
+        for i in range(epochs):
+            self.train_hidden8(X_64, Y_64)
+            if i % 500 == 0:
+                output_train = forward_prop(X_64, self.V_8, self.W_8)
+                output_test = forward_prop(X_64_test, self.V_8, self.W_8)
+                MSE_train = loss(Y_64.T, output_train)
+                MSE_test = loss(Y_64.T, output_test)
+                losses_train.append(MSE_train)
+                losses_test.append(MSE_test)
+
+        plt.plot(losses_train, label='8 hidden neurons, 64 training vectors, on training data')
+        plt.plot(losses_test, label='8 hidden neurons, 64 training vectors, on test data')
+
 
 mlp1 = MLP2Neuron()
-
-mlp2 = MLP4Neuron()
-
-mlp3 = MLP8Neuron()
-
-mlp1.run_16()
-# mlp2.run_64()
-# mlp3.run_64()
-
-plt.title("2 hidden neurons, 16 training vectors")
-mlp1.draw_network()
-
-
-
-
-#mlp1.run_16()
-#mlp2.run_16()
-# mlp3.run_16()
-# print('1-1' + str(mlp3.forward([-1, 1, 1])))
-# print('1-0' + str(mlp3.forward([-1, 1, 0])))
-# print('0-1' + str(mlp3.forward([-1, 0, 1])))
-# print('0-0' + str(mlp3.forward([-1, 0, 0])))
-# mlp3.draw_network()
-# plt.legend()
-# plt.show()
+mlp1.generalisation_test()
+plt.legend()
+plt.show()
 
 
